@@ -1,10 +1,10 @@
 # Dithered Isotropic Latent
 
-Generate **training-free “smart noise”** latents that are isotropic, lightly textured, and numerically well-conditioned for diffusion. The node optimizes a tiny objective a few steps over Gaussian noise, then re-normalizes—yielding latents that tend to start samplers in a healthier part of the space than plain i.i.d. noise.  
+Generate training-free “smart noise” latents that are isotropic, lightly textured, and numerically well-conditioned for diffusion. The node optimizes a tiny objective a few steps over Gaussian noise, then re-normalizes—yielding latents that tend to start samplers in a healthier part of the space than plain i.i.d. noise.  
 
 ## Highlights
 
-* **Drop-in ComfyUI node**: `DIL_EmptyLatent` (“Dithered Isotropic Latent”) appears under the *latent* category. 
+* **Drop-in [ComfyUI](https://github.com/comfyanonymous/ComfyUI) node**: `DIL_EmptyLatent` (“Dithered Isotropic Latent”) appears under the *latent* category. 
 * **Clean UI**: only **width**, **height**, **batch_size** are visible; **seed / iters / eta / channels** live under *Advanced*.  
 * **Sampler-friendly shape**: outputs a standard diffusion latent `[B, 4, H', W']`, with `H' = H/8`, `W' = W/8`, and inputs clamped to multiples of 8 for SD/SDXL VAEs.  
 * **Safe defaults**: `iters=2`, `eta=0.05`; robust device/dtype handling and graceful fallbacks when Comfy internals aren’t present.  
@@ -16,7 +16,7 @@ Generate **training-free “smart noise”** latents that are isotropic, lightly
    ```
    ComfyUI/custom_nodes/dil-empty-latent
    ```
-2. **Restart ComfyUI**. You should see **“Dithered Isotropic Latent”** in the *latent* category. 
+2. **Restart [ComfyUI](https://github.com/comfyanonymous/ComfyUI)**. You should see **“Dithered Isotropic Latent”** in the *latent* category. 
 
 > DIL also runs as a plain PyTorch script thanks to internal fallbacks for device and dtype management (no Comfy dependency required at runtime). 
 
@@ -87,4 +87,5 @@ All UI fields and defaults are defined in the node class: `width/height/batch_si
 ## Development
 
 * Core gradient loop and re-normalization happen under `torch.inference_mode(False)` to allow autograd, with a per-step unit-Gaussian clamp for stability. 
+
 * The score combines **edges**, **frequency balance**, **Gaussian regularity**, and **orientation coherence** with conservative weights `a=1.0, b=0.6, c=0.1, d=0.3`. 
