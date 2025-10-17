@@ -44,11 +44,7 @@ All UI fields and defaults are defined in the node class: `width/height/batch_si
 * Orientation coherence penalty from the structure tensor:
   `coh = ((Jxx−Jyy)^2 + 4*Jxy^2) / (Jxx+Jyy)^2` (clamped to [0,1])
 * Gaussian regularity: `gauss_reg = −(mean(x)^2 + (std(x)−1)^2)`
-* Final scalar objective:
-
-  ```
-  S(x) = 1.0*edge + 0.6*hf + 0.1*gauss_reg − 0.3*coh
-  ```
+* Final scalar objective:`S(x) = 1.0*edge + 0.6*hf + 0.1*gauss_reg − 0.3*coh`
 
 3. **Few gradient-ascent nudges**
    Repeat `iters` times: `x ← x + η * ∇x S(x)`; re-normalize to unit Gaussian after each step. Implemented under `torch.inference_mode(False)` to allow gradients inside the loop. Defaults: `iters=2`, `eta=0.05`.   
@@ -89,3 +85,4 @@ All UI fields and defaults are defined in the node class: `width/height/batch_si
 * Core gradient loop and re-normalization happen under `torch.inference_mode(False)` to allow autograd, with a per-step unit-Gaussian clamp for stability. 
 
 * The score combines **edges**, **frequency balance**, **Gaussian regularity**, and **orientation coherence** with conservative weights `a=1.0, b=0.6, c=0.1, d=0.3`. 
+
