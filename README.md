@@ -18,17 +18,8 @@ Generate training-free “smart noise” latents that are isotropic, lightly tex
    ```
 2. **Restart [ComfyUI](https://github.com/comfyanonymous/ComfyUI)**. You should see **“Dithered Isotropic Latent”** in the *latent* category. 
 
-> DIL also runs as a plain PyTorch script thanks to internal fallbacks for device and dtype management (no Comfy dependency required at runtime). 
-
-## Quickstart (ComfyUI)
-
-1. Drop **Dithered Isotropic Latent** into your graph.
-2. Set **width / height / batch_size** (only these are visible).
-3. (Optional) Expand **Advanced** to set **seed**, **iters**, **eta**, **channels**.
-4. Wire the **latent** output to your sampler.
-
-All UI fields and defaults are defined in the node class: `width/height/batch_size` (visible) and `seed/iters/eta/channels` (hidden). 
-
+> DIL also runs as a plain PyTorch script thanks to internal fallbacks for device and dtype management (no Comfy dependency required at runtime).
+> 
 ## How it works
 
 **Start with Gaussian noise + tiny blue-ish dither, then optimize a small score for a few steps (with renormalization each time):**
@@ -85,4 +76,5 @@ All UI fields and defaults are defined in the node class: `width/height/batch_si
 * Core gradient loop and re-normalization happen under `torch.inference_mode(False)` to allow autograd, with a per-step unit-Gaussian clamp for stability. 
 
 * The score combines **edges**, **frequency balance**, **Gaussian regularity**, and **orientation coherence** with conservative weights `a=1.0, b=0.6, c=0.1, d=0.3`. 
+
 
