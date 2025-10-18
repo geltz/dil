@@ -50,7 +50,7 @@ Generate training-free “smart noise” latents that are isotropic, lightly tex
 * **Inputs**
 
   * **Required**: `width`, `height`, `batch_size`
-  * **Advanced (hidden)**: `seed`, `iters`, `eta`, `channels` (defaults shown in code) 
+  * **Advanced**: `seed`, `iters`, `eta`, `channels`
 * **Dimension handling**: `width`/`height` are converted to latent dims by dividing by 8 (integer) with clamping. 
 
 ## Implementation notes
@@ -76,5 +76,6 @@ Generate training-free “smart noise” latents that are isotropic, lightly tex
 * Core gradient loop and re-normalization happen under `torch.inference_mode(False)` to allow autograd, with a per-step unit-Gaussian clamp for stability. 
 
 * The score combines **edges**, **frequency balance**, **Gaussian regularity**, and **orientation coherence** with conservative weights `a=1.0, b=0.6, c=0.1, d=0.3`. 
+
 
 
